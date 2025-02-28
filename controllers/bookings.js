@@ -48,6 +48,8 @@ exports.getBooking = async (req, res, next) => {
     }
 };
 
+const startDate = new Date('2022-05-10');
+const endDate = new Date('2022-05-13');
 exports.addBooking = async (req, res, next) => {
     try {
         req.body.company = req.params.companyId;
@@ -55,6 +57,12 @@ exports.addBooking = async (req, res, next) => {
         if (!company) {
             return res.status(404).json({ success: false, message: "No company with id of " + req.params.companyId });
         }
+
+        const bookingDate = new Date(req.body.bookingDate);
+        if (bookingDate < startDate || bookingDate > endDate) {
+            return res.status(400).json({ success: false, message: "Booking date must be between May 10th and May 13th, 2024" });
+        }
+
         console.log(req.body.user);
         req.body.user = req.user.id;
         const existedBooking = await Booking.find({ user: req.user.id });
@@ -86,6 +94,11 @@ exports.updateBooking = async (req, res, next) => {
                 success: false,
                 message: "User " + req.user.id + " is not authorized to update this Booking"
             });
+        }
+        
+        const bookingDate = new Date(req.body.bookingDate);
+        if (bookingDate < startDate || bookingDate > endDate) {
+            return res.status(400).json({ success: false, message: "Booking date must be between May 10th and May 13th, 2024" });
         }
 
         booking = await Booking.findByIdAndUpdate(req.params.id, req.body, {
