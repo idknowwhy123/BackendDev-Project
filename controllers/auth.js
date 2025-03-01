@@ -1,5 +1,6 @@
 const { get } = require("mongoose");
 const User = require("../models/User");
+const nodemailer = require("nodemailer");
 
 exports.register = async (req, res, next) => {
   try {
@@ -84,6 +85,25 @@ exports.logout = async (req, res, next) => {
   res.status(200).json({ success: true, data: {} });
 };
 
+const sendResetEmail = async (email, resetUrl) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Password Reset Request",
+    text: `You requested a password reset. Please click the following link to reset your password: \n\n ${resetUrl}`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
 exports.requestPasswordReset = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -99,6 +119,10 @@ exports.requestPasswordReset = async (req, res, next) => {
     const resetToken = user.getResetPasswordToken();
 
     await user.save({ validateBeforeSave: false });
+
+    const resetUrl = `Your Password Reset Token is: ${resetToken}`;
+
+    await sendResetEmail(email, resetUrl);
 
     res.status(200).json({
       success: true,
