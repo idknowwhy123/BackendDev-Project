@@ -62,7 +62,9 @@
 AuthController --> AuthMiddleware
 CompanyController --> Company
 BookingController --> Booking
-AuthMiddleware --> User
+CompanyController --> AuthMiddleware 
+BookingController --> AuthMiddleware
+AuthController --> User
 Booking --> User : "belongs to"
 Booking --> Company : "references multiple"
 
