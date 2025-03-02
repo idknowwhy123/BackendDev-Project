@@ -40,7 +40,7 @@ DB --> CM: **companies list**
 CM --> CC: **companies list**
 deactivate CR
 deactivate CM
-CC -> User: **200 OK**
+CC --> User: **200 OK**
 deactivate CC
 
 
@@ -57,7 +57,7 @@ DB --> CM: **company data**
 CM --> CC: **company data**
 deactivate CM
 deactivate CR
-CC -> User: **200 OK / 404 Not Found**
+CC --> User: **200 OK / 404 Not Found**
 deactivate CC
 
 
@@ -78,7 +78,7 @@ CM --> CC: **New company data**
 deactivate AM
 deactivate CM
 deactivate CR
-CC -> User: **201 Created**
+CC --> User: **201 Created**
 deactivate CC
 
 
@@ -105,7 +105,7 @@ CM --> DB: **Update company data**
 DB --> CM: **Updated company data**
 CM --> CC: **Updated company**
 deactivate CM
-CC -> User: **200 OK / 404 Not Found**
+CC --> User: **200 OK / 404 Not Found**
 deactivate CC
 
 
@@ -132,7 +132,7 @@ CM --> DB: **Delete company by ID**
 DB --> CM: **Deletion success**
 CM --> CC: **Deletion confirmation**
 deactivate CM
-CC -> User: **200 OK / 404 Not Found**
+CC --> User: **200 OK / 404 Not Found**
 deactivate CC
 
 
