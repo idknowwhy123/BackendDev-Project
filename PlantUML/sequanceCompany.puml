@@ -34,13 +34,15 @@ CR -> CC: **getCompanies()**
 activate CC #F0E68C
 CC -> CM: **Company.find()**
 activate CM #ADD8E6
+
 CM --> DB: **Query all companies**
 DB --> CM: **companies list**
 CM --> CC: **companies list**
+deactivate CR
 deactivate CM
 CC -> User: **200 OK**
 deactivate CC
-deactivate CR
+
 
 == 🔵 GET SINGLE COMPANY ==
 
@@ -54,9 +56,10 @@ CM --> DB: **Query company by ID**
 DB --> CM: **company data**
 CM --> CC: **company data**
 deactivate CM
+deactivate CR
 CC -> User: **200 OK / 404 Not Found**
 deactivate CC
-deactivate CR
+
 
 == 🟠 CREATE COMPANY (Admin Only) ==
 
@@ -65,17 +68,19 @@ activate CR #C0FFC0
 CR -> AM: **protect, authorize('admin')**
 activate AM #FF6347
 AM -> CC: **createCompany(req.body)**
-deactivate AM
+
 activate CC #F0E68C
 CC -> CM: **Company.create(req.body)**
 activate CM #ADD8E6
 CM --> DB: **Insert new company**
 DB --> CM: **New company data**
 CM --> CC: **New company data**
+deactivate AM
 deactivate CM
+deactivate CR
 CC -> User: **201 Created**
 deactivate CC
-deactivate CR
+
 
 == 🟡 UPDATE COMPANY (Admin Only) ==
 
@@ -84,14 +89,16 @@ activate CR #C0FFC0
 CR -> AM: **protect, authorize('admin')**
 activate AM #FF6347
 AM -> CC: **updateCompany(req.params.id, req.body)**
-deactivate AM
+
 activate CC #F0E68C
 CC -> CM: **Company.findById(req.params.id)**
 activate CM #ADD8E6
 CM --> DB: **Query company by ID**
 DB --> CM: **company data**
 CM --> CC: **company data**
+deactivate AM
 deactivate CM
+deactivate CR
 CC -> CM: **Company.update(req.params.id, req.body)**
 activate CM #ADD8E6
 CM --> DB: **Update company data**
@@ -100,7 +107,7 @@ CM --> CC: **Updated company**
 deactivate CM
 CC -> User: **200 OK / 404 Not Found**
 deactivate CC
-deactivate CR
+
 
 == 🔴 DELETE COMPANY (Admin Only) ==
 
@@ -109,14 +116,16 @@ activate CR #C0FFC0
 CR -> AM: **protect, authorize('admin')**
 activate AM #FF6347
 AM -> CC: **deleteCompany(req.params.id)**
-deactivate AM
+
 activate CC #F0E68C
 CC -> CM: **Company.findById(req.params.id)**
 activate CM #ADD8E6
 CM --> DB: **Query company by ID**
 DB --> CM: **company data**
 CM --> CC: **company data**
+deactivate AM
 deactivate CM
+deactivate CR
 CC -> CM: **Company.remove(req.params.id)**
 activate CM #ADD8E6
 CM --> DB: **Delete company by ID**
@@ -125,6 +134,6 @@ CM --> CC: **Deletion confirmation**
 deactivate CM
 CC -> User: **200 OK / 404 Not Found**
 deactivate CC
-deactivate CR
+
 
 @enduml

@@ -12,6 +12,7 @@ skinparam {
 
 actor "**User**" as User
 participant "**Auth Router**" as AR   #98FB98
+participant "**Auth Middleware**" as AM   #FF6347
 participant "**Auth Controller**" as AC #FFD700
 participant "**User Model**" as UM       #87CEEB
 database "**MongoDB: Users**" as DB #C0C0C0
@@ -29,10 +30,12 @@ DB --> UM : **new user**
 deactivate DB
 UM --> AC : **new user**
 deactivate UM
-AC --> AR : **201 Created (JWT Token)**
-deactivate AC
-AR --> User : **201 Created (JWT Token)**
 deactivate AR
+AC --> User : **201 Created (JWT Token)**
+deactivate AC
+
+' AR --> User : **201 Created (JWT Token)**
+
 
 == Login ==
 User -> AR : **POST /api/v1/auth/login**
@@ -51,10 +54,10 @@ AC -> UM : **matchPassword(enteredPassword)**
 activate UM #87CEEB
 UM --> AC : **true/false**
 deactivate UM
-AC --> AR : **200 OK (JWT Token) / 401 Unauthorized**
-deactivate AC
-AR --> User : **200 OK (JWT Token) / 401 Unauthorized**
 deactivate AR
+AC --> User : **200 OK (JWT Token) / 401 Unauthorized**
+deactivate AC
+
 
 == Get Me ==
 User -> AR : **GET /api/v1/auth/me**
@@ -69,19 +72,19 @@ DB --> UM : **user**
 deactivate DB
 UM --> AC : **user**
 deactivate UM
-AC --> AR : **200 OK**
-deactivate AC
-AR --> User : **200 OK**
 deactivate AR
+AC --> User : **200 OK**
+deactivate AC
+
 
 == Logout ==
 User -> AR : **GET /api/v1/auth/logout**
 activate AR #98FB98
 AR -> AC : **logout()**
 activate AC #FFD700
-AC --> AR : **200 OK (Cookie Cleared)**
-deactivate AC
-AR --> User : **200 OK (Cookie Cleared)**
 deactivate AR
+AC --> User : **200 OK (Cookie Cleared)**
+deactivate AC
+
 
 @enduml

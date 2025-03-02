@@ -30,14 +30,13 @@ BM -> DB : **find({})**
 activate DB #C0C0C0
 DB --> BM : **All bookings data**
 deactivate DB
+deactivate AM
+deactivate BR
 BM --> BC : **bookings**
 deactivate BM
-BC --> AM : **200 OK**
+BC --> User : **200 OK**
 deactivate BC
-AM --> BR : **200 OK**
-deactivate AM
-BR --> User : **200 OK**
-deactivate BR
+
 
 == Get Single Booking ==
 User -> BR : **GET /api/v1/bookings/:id**
@@ -52,14 +51,13 @@ BM -> DB : **findById(id)**
 activate DB #C0C0C0
 DB --> BM : **Single booking**
 deactivate DB
+deactivate AM
+deactivate BR
 BM --> BC : **booking**
 deactivate BM
-BC --> AM : **200 OK / 404 Not Found**
+BC --> User : **200 OK / 404 Not Found**
 deactivate BC
-AM --> BR : **200 OK / 404 Not Found**
-deactivate AM
-BR --> User : **200 OK / 404 Not Found**
-deactivate BR
+
 
 == Create Booking ==
 User -> BR : **POST /api/v1/bookings**
@@ -74,14 +72,13 @@ BM -> DB : **insertOne(req.body)**
 activate DB #C0C0C0
 DB --> BM : **new booking**
 deactivate DB
+deactivate AM
+deactivate BR
 BM --> BC : **new booking**
 deactivate BM
-BC --> AM : **201 Created**
+BC --> User : **201 Created**
 deactivate BC
-AM --> BR : **201 Created**
-deactivate AM
-BR --> User : **201 Created**
-deactivate BR
+
 
 == Update Booking ==
 User -> BR : **PUT /api/v1/bookings/:id**
@@ -96,14 +93,13 @@ BM -> DB : **updateOne({ _id: id }, { $set: req.body })**
 activate DB #C0C0C0
 DB --> BM : **updated booking**
 deactivate DB
+deactivate AM
+deactivate BR
 BM --> BC : **updated booking**
 deactivate BM
-BC --> AM : **200 OK / 404 Not Found**
+BC --> User : **200 OK / 404 Not Found**
 deactivate BC
-AM --> BR : **200 OK / 404 Not Found**
-deactivate AM
-BR --> User : **200 OK / 404 Not Found**
-deactivate BR
+
 
 == Delete Booking ==
 User -> BR : **DELETE /api/v1/bookings/:id**
@@ -118,13 +114,12 @@ BM -> DB : **deleteOne({ _id: id })**
 activate DB #C0C0C0
 DB --> BM : **success**
 deactivate DB
+deactivate AM
+deactivate BR
 BM --> BC : **success**
 deactivate BM
-BC --> AM : **200 OK / 404 Not Found**
+BC --> User : **200 OK / 404 Not Found**
 deactivate BC
-AM --> BR : **200 OK / 404 Not Found**
-deactivate AM
-BR --> User : **200 OK / 404 Not Found**
-deactivate BR
+
 
 @enduml
