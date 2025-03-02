@@ -1,0 +1,130 @@
+@startuml sequenceCompanyAPI
+
+skinparam {
+    defaultFontName Consolas
+    defaultFontSize 14
+    shadowing true
+    componentStyle uml2
+    MinClassWidth 150
+    ParticipantPadding 50
+    ArrowThickness 1.5
+}
+
+skinparam participantBackgroundColor #E6F2FF
+skinparam databaseBackgroundColor #FFB6C1
+skinparam sequenceLifeLineBorderColor #4682B4
+skinparam sequenceArrowColor #black
+skinparam sequenceGroupBorderColor #DAA520
+skinparam sequenceGroupBackgroundColor #FFFACD
+
+actor "**User/Admin**" as User
+participant "**Companies Router**" as CR   #98FB98
+participant "**Auth Middleware**" as AM   #FF6347
+participant "**Companies Controller**" as CC #FFD700
+participant "**Company Model**" as CM       #87CEEB
+database "**MongoDB**" as DB                #FFB6C1
+
+skinparam shadowing false
+
+== 🟢 GET ALL COMPANIES ==
+
+User -> CR: **GET /api/v1/companies**
+activate CR #C0FFC0
+CR -> CC: **getCompanies()**
+activate CC #F0E68C
+CC -> CM: **Company.find()**
+activate CM #ADD8E6
+CM --> DB: **Query all companies**
+DB --> CM: **companies list**
+CM --> CC: **companies list**
+deactivate CM
+CC -> User: **200 OK**
+deactivate CC
+deactivate CR
+
+== 🔵 GET SINGLE COMPANY ==
+
+User -> CR: **GET /api/v1/companies/:id**
+activate CR #C0FFC0
+CR -> CC: **getCompany(req.params.id)**
+activate CC #F0E68C
+CC -> CM: **Company.findById(req.params.id)**
+activate CM #ADD8E6
+CM --> DB: **Query company by ID**
+DB --> CM: **company data**
+CM --> CC: **company data**
+deactivate CM
+CC -> User: **200 OK / 404 Not Found**
+deactivate CC
+deactivate CR
+
+== 🟠 CREATE COMPANY (Admin Only) ==
+
+User -> CR: **POST /api/v1/companies (companyData)**
+activate CR #C0FFC0
+CR -> AM: **protect, authorize('admin')**
+activate AM #FF6347
+AM -> CC: **createCompany(req.body)**
+deactivate AM
+activate CC #F0E68C
+CC -> CM: **Company.create(req.body)**
+activate CM #ADD8E6
+CM --> DB: **Insert new company**
+DB --> CM: **New company data**
+CM --> CC: **New company data**
+deactivate CM
+CC -> User: **201 Created**
+deactivate CC
+deactivate CR
+
+== 🟡 UPDATE COMPANY (Admin Only) ==
+
+User -> CR: **PUT /api/v1/companies/:id (updateData)**
+activate CR #C0FFC0
+CR -> AM: **protect, authorize('admin')**
+activate AM #FF6347
+AM -> CC: **updateCompany(req.params.id, req.body)**
+deactivate AM
+activate CC #F0E68C
+CC -> CM: **Company.findById(req.params.id)**
+activate CM #ADD8E6
+CM --> DB: **Query company by ID**
+DB --> CM: **company data**
+CM --> CC: **company data**
+deactivate CM
+CC -> CM: **Company.update(req.params.id, req.body)**
+activate CM #ADD8E6
+CM --> DB: **Update company data**
+DB --> CM: **Updated company data**
+CM --> CC: **Updated company**
+deactivate CM
+CC -> User: **200 OK / 404 Not Found**
+deactivate CC
+deactivate CR
+
+== 🔴 DELETE COMPANY (Admin Only) ==
+
+User -> CR: **DELETE /api/v1/companies/:id**
+activate CR #C0FFC0
+CR -> AM: **protect, authorize('admin')**
+activate AM #FF6347
+AM -> CC: **deleteCompany(req.params.id)**
+deactivate AM
+activate CC #F0E68C
+CC -> CM: **Company.findById(req.params.id)**
+activate CM #ADD8E6
+CM --> DB: **Query company by ID**
+DB --> CM: **company data**
+CM --> CC: **company data**
+deactivate CM
+CC -> CM: **Company.remove(req.params.id)**
+activate CM #ADD8E6
+CM --> DB: **Delete company by ID**
+DB --> CM: **Deletion success**
+CM --> CC: **Deletion confirmation**
+deactivate CM
+CC -> User: **200 OK / 404 Not Found**
+deactivate CC
+deactivate CR
+
+@enduml

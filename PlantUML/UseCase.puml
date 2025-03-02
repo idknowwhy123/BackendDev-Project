@@ -1,0 +1,63 @@
+@startuml usecaseAuth_diagram
+
+left to right direction
+
+skinparam {
+    defaultFontName Consolas
+    defaultFontSize 14
+    shadowing true
+    arrowColor #666666
+    actorBorderColor #666666
+    usecaseBorderColor #333333
+    rectangleBorderColor #333333
+    rectangleBackgroundColor #f0f0f0
+    componentStyle uml2
+    ArrowThickness 1.5
+}
+
+actor User as user
+
+rectangle "Authentication" {
+    usecase "Register" as register
+    usecase "Login" as login
+    usecase "Logout" as logout
+    usecase "Get Me" as getme
+}
+
+
+
+
+
+user -- register   #Blue
+user -- login      #Blue
+user -- logout     #Blue
+user -- getme      #Blue
+
+actor Admin as admin
+
+register -- admin  #Red
+login    -- admin  #Red
+logout   -- admin  #Red
+getme    -- admin  #Red
+
+rectangle "Booking" {
+    user -- (View Bookings) #Blue
+    user -- (Create Booking) #Blue
+    user -- (Update Booking) #Blue
+    user -- (Cancel Booking) #Blue
+    ' admin -- (Manage All Bookings) #Red
+    (View Bookings) -- admin  #Red
+    (Create Booking) -- admin  #Red
+    (Update Booking) -- admin   #Red
+    (Cancel Booking) -- admin   #Red
+}
+
+rectangle "Company" {
+    user -- (View Companies) #Blue
+    admin -- (View Companies) #Red
+    admin -- (Create Company) #Red
+    admin -- (Update Company) #Red
+    admin -- (Delete Company) #Red
+}
+
+@enduml

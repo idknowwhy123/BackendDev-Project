@@ -1,0 +1,69 @@
+@startuml
+
+    class AuthController {
+        + register(req, res, next): void
+        + login(req, res, next): void
+        + logout(req, res, next): void
+        + getMe(req, res, next): void
+    }
+
+    class CompanyController {
+        + getCompanies(req, res, next): void
+        + getCompany(req, res, next): void
+        + createCompany(req, res, next): void
+        + updateCompany(req, res, next): void
+        + deleteCompany(req, res, next): void
+    }
+
+    class BookingController {
+        + getBookings(req, res, next): void
+        + getBooking(req, res, next): void
+        + addBooking(req, res, next): void
+        + updateBooking(req, res, next): void
+        + deleteBooking(req, res, next): void
+    }
+
+
+    class AuthMiddleware {
+        + protect(req, res, next): void
+        + authorize(...roles): void
+    }
+
+
+    class User {
+        + name : String
+        + tel : String (unique)
+        + email : String (unique)
+        + role : String [user | admin]
+        + password : String (hashed)
+        + resetPasswordToken : String
+        + resetPasswordExpire : Date
+        + createdAt : Date
+        --
+        + getSignedJwtToken() : String
+        + matchPassword(enteredPassword) : Boolean
+    }
+
+    class Company {
+        + name : String
+        + address : String
+        + website : String
+        + description : String
+        + tel : String
+    }
+
+    class Booking {
+        + bookingDate : Date
+        + user : ObjectId (ref: User)
+        + company : ObjectId[] (ref: Company)
+        + createdAt : Date
+    }
+
+AuthController --> AuthMiddleware
+CompanyController --> Company
+BookingController --> Booking
+AuthMiddleware --> User
+Booking --> User : "belongs to"
+Booking --> Company : "references multiple"
+
+@enduml

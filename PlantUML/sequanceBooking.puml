@@ -1,0 +1,130 @@
+@startuml BookingAPI
+
+skinparam {
+    defaultFontName Arial
+    defaultFontSize 14
+    shadowing false
+    componentStyle uml2
+    MinClassWidth 150
+    ParticipantPadding 50
+    ArrowThickness 1.5
+}
+
+actor "**User**" as User
+participant "**Booking Router**" as BR     #98FB98
+participant "**Auth Middleware**" as AM   #FF6347
+participant "**Booking Controller**" as BC #FFD700
+participant "**Booking Model**" as BM       #87CEEB
+database "**MongoDB: Bookings**" as DB #C0C0C0
+
+== Get All Bookings ==
+User -> BR : **GET /api/v1/bookings**
+activate BR #98FB98
+BR -> AM : **protect, authorize('user', 'admin')**
+activate AM #FF6347
+AM -> BC : **getBookings()**
+activate BC #FFD700
+BC -> BM : **getAll()**
+activate BM #87CEEB
+BM -> DB : **find({})**
+activate DB #C0C0C0
+DB --> BM : **All bookings data**
+deactivate DB
+BM --> BC : **bookings**
+deactivate BM
+BC --> AM : **200 OK**
+deactivate BC
+AM --> BR : **200 OK**
+deactivate AM
+BR --> User : **200 OK**
+deactivate BR
+
+== Get Single Booking ==
+User -> BR : **GET /api/v1/bookings/:id**
+activate BR #98FB98
+BR -> AM : **protect**
+activate AM #FF6347
+AM -> BC : **getBooking()**
+activate BC #FFD700
+BC -> BM : **getById(id)**
+activate BM #87CEEB
+BM -> DB : **findById(id)**
+activate DB #C0C0C0
+DB --> BM : **Single booking**
+deactivate DB
+BM --> BC : **booking**
+deactivate BM
+BC --> AM : **200 OK / 404 Not Found**
+deactivate BC
+AM --> BR : **200 OK / 404 Not Found**
+deactivate AM
+BR --> User : **200 OK / 404 Not Found**
+deactivate BR
+
+== Create Booking ==
+User -> BR : **POST /api/v1/bookings**
+activate BR #98FB98
+BR -> AM : **protect, authorize('user', 'admin')**
+activate AM #FF6347
+AM -> BC : **addBooking()**
+activate BC #FFD700
+BC -> BM : **createBooking(req.body)**
+activate BM #87CEEB
+BM -> DB : **insertOne(req.body)**
+activate DB #C0C0C0
+DB --> BM : **new booking**
+deactivate DB
+BM --> BC : **new booking**
+deactivate BM
+BC --> AM : **201 Created**
+deactivate BC
+AM --> BR : **201 Created**
+deactivate AM
+BR --> User : **201 Created**
+deactivate BR
+
+== Update Booking ==
+User -> BR : **PUT /api/v1/bookings/:id**
+activate BR #98FB98
+BR -> AM : **protect, authorize('user', 'admin')**
+activate AM #FF6347
+AM -> BC : **updateBooking()**
+activate BC #FFD700
+BC -> BM : **updateBooking(id, req.body)**
+activate BM #87CEEB
+BM -> DB : **updateOne({ _id: id }, { $set: req.body })**
+activate DB #C0C0C0
+DB --> BM : **updated booking**
+deactivate DB
+BM --> BC : **updated booking**
+deactivate BM
+BC --> AM : **200 OK / 404 Not Found**
+deactivate BC
+AM --> BR : **200 OK / 404 Not Found**
+deactivate AM
+BR --> User : **200 OK / 404 Not Found**
+deactivate BR
+
+== Delete Booking ==
+User -> BR : **DELETE /api/v1/bookings/:id**
+activate BR #98FB98
+BR -> AM : **protect, authorize('user', 'admin')**
+activate AM #FF6347
+AM -> BC : **deleteBooking()**
+activate BC #FFD700
+BC -> BM : **deleteBooking(id)**
+activate BM #87CEEB
+BM -> DB : **deleteOne({ _id: id })**
+activate DB #C0C0C0
+DB --> BM : **success**
+deactivate DB
+BM --> BC : **success**
+deactivate BM
+BC --> AM : **200 OK / 404 Not Found**
+deactivate BC
+AM --> BR : **200 OK / 404 Not Found**
+deactivate AM
+BR --> User : **200 OK / 404 Not Found**
+deactivate BR
+
+@enduml
