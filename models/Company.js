@@ -20,11 +20,11 @@ const CompanySchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add a description'],
     },
-    tel:{
+    tel: {
         type: String,
         required: [true, 'Please add a telephone number'],
     },
-},{
+}, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });

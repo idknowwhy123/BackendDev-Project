@@ -95,7 +95,7 @@ exports.updateBooking = async (req, res, next) => {
                 message: "User " + req.user.id + " is not authorized to update this Booking"
             });
         }
-        
+
         const bookingDate = new Date(req.body.bookingDate);
         if (bookingDate < startDate || bookingDate > endDate) {
             return res.status(400).json({ success: false, message: "Booking date must be between May 10th and May 13th, 2024" });

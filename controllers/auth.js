@@ -78,12 +78,13 @@ exports.getMe = async (req, res, next) => {
 };
 
 exports.logout = async (req, res, next) => {
-  res.cookie("token", "none", {
+  res.cookie('token', 'none', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
   });
   res.status(200).json({ success: true, data: {} });
 };
+
 
 const sendResetEmail = async (email, resetUrl) => {
   const transporter = nodemailer.createTransport({
@@ -102,11 +103,18 @@ const sendResetEmail = async (email, resetUrl) => {
   };
 
   await transporter.sendMail(mailOptions);
+  console.log("Email sent");
 };
 
 exports.requestPasswordReset = async (req, res, next) => {
   try {
     const { email } = req.body;
+
+    if (!email) {
+      return res
+        .status(400)
+        .json({ success: false, msg: "Please provide an email and password" }); // Add return here to stop execution
+    }
 
     const user = await User.findOne({ email });
 
@@ -140,6 +148,8 @@ exports.requestPasswordReset = async (req, res, next) => {
   }
 };
 
+
+// cannot sent to email because gmail not allow nodemailer to login to account
 exports.resetPassword = async (req, res, next) => {
   try {
     const { resetToken, newPassword } = req.body;
