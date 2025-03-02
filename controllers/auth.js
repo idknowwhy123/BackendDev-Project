@@ -148,8 +148,6 @@ exports.requestPasswordReset = async (req, res, next) => {
   }
 };
 
-
-// cannot sent to email because gmail not allow nodemailer to login to account
 exports.resetPassword = async (req, res, next) => {
   try {
     const { resetToken, newPassword } = req.body;
