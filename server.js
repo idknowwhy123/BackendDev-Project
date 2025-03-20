@@ -6,8 +6,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const { xss } = require('express-xss-sanitizer');
 const rateLimit = require('express-rate-limit');
-const swaggerJsDoc = require('swagger-jsdoc');
-const swaggerUI = require('swagger-ui-express');
+const cors = require('cors');
 
 dotenv.config({ path: './config/config.env' });
 connectDB();
@@ -22,6 +21,13 @@ const limiter = rateLimit({
     max: 100
 })
 
+const corsOptions = {
+    origin: 'http://localhost:3000/',
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization'
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(mongoSanitize());
