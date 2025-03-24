@@ -128,7 +128,7 @@ exports.requestPasswordReset = async (req, res, next) => {
 
     await user.save({ validateBeforeSave: false });
 
-    const resetUrl = `Your Password Reset Token is: ${resetToken}`;
+    const resetUrl = `Your link : ${process.env.RESET_URL}${resetToken}`;
 
     await sendResetEmail(email, resetUrl);
 
