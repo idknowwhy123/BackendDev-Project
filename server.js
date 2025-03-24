@@ -22,7 +22,7 @@ const limiter = rateLimit({
 })
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: ["http://localhost:3000", "https://fe-project-2024-2-iaukumoai.vercel.app"],
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization'
 };
